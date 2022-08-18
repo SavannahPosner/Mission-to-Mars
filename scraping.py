@@ -99,44 +99,120 @@ def mars_facts():
     return df.to_html(classes="table table-striped")
 
 def hemisphere(browser):
-    # 1. Use browser to visit the URL 
-    url = 'https://marshemispheres.com/'
-
-    browser.visit(url)
-
-    # 2. Create a list to hold the images and titles.
-    hemisphere_image_urls = []
-    html = browser.html
-    img_soup = soup(html, 'html.parser')
-    new = []
-    for news in img_soup.find_all('a', class_='itemLink product-item'): 
-        link = news.get('href')
-        if link not in new: 
-            new.append(link)
-            full=[]
-
-    titleN = []
-    targets = []
-    hemisphere_image_urls = []
-    hemisphere = {}
-    # parse through the all the needed pages to retrieve the title, full image, and sample link 
-    for link in new: 
-        browser.visit(url+link)
-        html = browser.html
-        new_soup = soup(html, 'html.parser')
-        for title in new_soup.find_all('div', class_='cover'):
-            hemisphere['title']=title.find('h2').text
-           
-            # titleN.append(title.find('h2').text)  
-            # hemisphere['title']=titleN
-        for fuller in new_soup.find_all('img', class_='wide-image'):
-            hemisphere['img_url']=f"https://marshemispheres.com/{fuller.get('src')}"
     
-        #create dictionaries for each set of data
+
+    url='https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(url)
+    hemisphere_image_urls = []
+    imgs_links= browser.find_by_css("a.product-item h3")
+
+    for item in range(len(imgs_links)):
+        hemisphere={}
+
+        #  go to the elements by clicking on the link 
+        browser.find_by_css("a.product-item h3")[item].click()
+
+        # extract the high resolution image through the sample link 
+        img_url= browser.find_link_by_text("Sample").first
+        hemisphere['img_url']=img_url['href']
+
+        # get the hemisphere titles 
+        hemisphere['title']=browser.find_by_css("h2.title").text
+
         hemisphere_image_urls.append(hemisphere)
-    # 4. Print the list that holds the dictionary of each image url and title.
+
+        # Go Back
         browser.back()
-        return hemisphere_image_urls
+    return hemisphere_image_urls
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # 1. Use browser to visit the URL 
+    # url = 'https://marshemispheres.com/'
+
+    # browser.visit(url)
+
+    # # 2. Create a list to hold the images and titles.
+    # hemisphere_image_urls = []
+    # html = browser.html
+    # img_soup = soup(html, 'html.parser')
+    # new = []
+    # for news in img_soup.find_all('a', class_='itemLink product-item'): 
+    #     link = news.get('href')
+    #     if link not in new: 
+    #         new.append(link)
+    #         full=[]
+
+    # titleN = []
+    # targets = []
+    # hemisphere_image_urls = []
+    # hemisphere = {}
+    # # parse through the all the needed pages to retrieve the title, full image, and sample link 
+    # for link in new: 
+    #     browser.visit(url+link)
+    #     html = browser.html
+    #     new_soup = soup(html, 'html.parser')
+    #     for title in new_soup.find_all('div', class_='cover'):
+    #         hemisphere['title']=title.find('h2').text
+           
+    #         # titleN.append(title.find('h2').text)  
+    #         # hemisphere['title']=titleN
+    #     for fuller in new_soup.find_all('img', class_='wide-image'):
+    #         hemisphere['img_url']=f"https://marshemispheres.com/{fuller.get('src')}"
+    #     # sample_img= browser.find_link_by_text("Sample").first
+    #     # hemisphere['img_url']=sample_img['href']
+    
+    #     #create dictionaries for each set of data
+    #     hemisphere_image_urls.append(hemisphere)
+    # # 4. Print the list that holds the dictionary of each image url and title.
+    
+
+
+
+
+
+
+
+
+    # for link in new: 
+    #     browser.visit(url+link)
+    #     html = browser.html
+    #     new_soup = soup(html, 'html.parser')
+    #     title = new_soup.find('h3').text
+    #         # hemisphere['title']=title.find('h2').text
+    #         # titleN.append(title.find('h2').text)  
+    #     hemisphere['title']=title 
+    #     # title.find('h2').text
+    #     for fuller in new_soup.find_all('img', class_='wide-image'):
+    #         # targets.append(f"https://marshemispheres.com/{fuller.get('src')}")
+    #         hemisphere['img_url']=f"https://marshemispheres.com/{fuller.get('src')}"
+    #     # sample_img= browser.find_link_by_text("Sample").first
+    #     # hemisphere['img_url']=sample_img['href']
+
+    #     #create dictionaries for each set of data
+    #     hemisphere_image_urls.append(hemisphere)
+    # 4. Print the list that holds the dictionary of each image url and title.
+        
+    browser.back()
+    # return hemisphere_image_urls
     
 
 if __name__ == "__main__":
