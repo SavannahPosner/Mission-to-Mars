@@ -61,13 +61,14 @@
         </div>
 
         {% for hemisphere in mars.hemispheres %}
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="thumbnail">
-            <img src="{{hemisphere.img_url}}" alt="...">
+            <img src="{{hemisphere.img_url | default('static/images/error.png', true)}}" alt="Responsive image" class="img-responsive" >
             <div class="caption">
               <h3>{{hemisphere.title}}</h3>
             </div>
           </div>
+          
         </div>
         {% endfor %}
       </div>

@@ -125,20 +125,18 @@ def hemisphere(browser):
         html = browser.html
         new_soup = soup(html, 'html.parser')
         for title in new_soup.find_all('div', class_='cover'):
-            titleN.append(title.find('h2').text)  
-            hemisphere['title']=titleN
+            hemisphere['title']=title.find('h2').text
+           
+            # titleN.append(title.find('h2').text)  
+            # hemisphere['title']=titleN
         for fuller in new_soup.find_all('img', class_='wide-image'):
-            full.append(f"https://marshemispheres.com/{fuller.get('src')}")
-            hemisphere['img_url']=full 
-        for target in new_soup.find_all('a',target='_blank'):
-            if 'jpg' in target.get('href'): 
-                targets.append(target.get('href'))
-                hemisphere['target']=target 
-        #create dictionaries for each set of data
+            hemisphere['img_url']=f"https://marshemispheres.com/{fuller.get('src')}"
     
+        #create dictionaries for each set of data
+        hemisphere_image_urls.append(hemisphere)
     # 4. Print the list that holds the dictionary of each image url and title.
         browser.back()
-        return hemisphere
+        return hemisphere_image_urls
     
 
 if __name__ == "__main__":
